@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Rot13 {
     public char[] abecedari= {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','u','v','w','x','y','z'};
     public char[] abecedariCOnt= {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','U','V','W','X','Y','Z'};
@@ -6,7 +8,8 @@ public class Rot13 {
     public int cont = 0;
     public static void main(String[] args) {
         System.out.println("Introdueix una cadena per xifrar");
-        String paraula = Entrada.readLine();
+        Scanner scanner = new Scanner(System.in);
+        String paraula = scanner.nextLine();
         Rot13 rot13 = new Rot13();
         System.out.println(rot13.xifraRot13(paraula));
     }
@@ -14,23 +17,24 @@ public class Rot13 {
         for (char i: cadena.toCharArray()){
             if (Character.isLetter(i)){
                 if (Character.isUpperCase(i) == true){
-                    for (int j = 0; abecedariCOnt.length; j++){
-                        if ((j + 13)> 27){
-                            resultat = resultat + j(j+13);
-                        }
-                        else{
-                            resultat = resultat + j(j+13);
+                    for (char j: abecedariCOnt){
+                        if (j == i){
+                            int pos = j + 13;
+                            if (pos >= abecedariCOnt.length) {
+                                pos -= abecedariCOnt.length;
+                            }
+                            break;
                         }
                     }
                     resultat = resultat + abecedariCOnt[pos];
                 }
                 else {
-                    for (int j = 0; abecedariCOnt.length; j++){
+                    for (char j: abecedari){
                         cont++;
-                        if (e == i){
-                            pos = cont + 13;
-                            if (pos > abecedari.length){
-                                pos = abecedari.length - pos;
+                        if (j == i){
+                            int pos = j + 13;
+                            if (pos >= abecedari.length) {
+                                pos -= abecedari.length;
                             }
                             break;
                         }
@@ -49,9 +53,9 @@ public class Rot13 {
             if (Character.isUpperCase(i) == true){
                 for (char e: abecedari){
                     if (e == i){
-                        pos = abecedariCOnt[e] + 13;
-                        if (pos >= abecedari.length){
-                            pos -= abecedari.length;
+                        pos = e - 13;
+                        if (pos < 0) {
+                            pos += abecedariCOnt.length;
                         }
                         break;
                     }
@@ -61,9 +65,9 @@ public class Rot13 {
             else {
                 for (char e: abecedariCOnt){
                     if (e == i){
-                        pos = abecedariCOnt[e] + 13;
-                        if (pos >= abecedari.length){
-                            pos -= abecedari.length;
+                        pos = e - 13;
+                        if (pos < 0) {
+                            pos += abecedariCOnt.length;
                         }
                         break;
                     }

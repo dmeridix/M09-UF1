@@ -1,9 +1,13 @@
-import java.util.Scanner;
 
-public class RotX {
+import java.util.Scanner;
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
+
+public class Monoalfabetic {
     public final char[] abecedari = "aáàäbcçdeéèëfghiíìïjklmnñoóòöpqrstuúùüvwxyz".toCharArray();
     public final char[] abecedariMaj = "AÁÀÄBCÇDEÉÈËFGHIÍÌÏJKLMNÑOÓÒÖPQRSTUÚÙÜVXYZ".toCharArray();
-
+    
     public static void main(String[] args) {
         System.out.println("Introdueix una cadena per a xifrar:");
         Scanner scanner = new Scanner(System.in);
@@ -12,18 +16,21 @@ public class RotX {
         int des = Integer.parseInt(scanner.nextLine());
         RotX rotx = new RotX();
         paraula = rotx.xifraRotX(paraula, des);
-        System.out.println("Cadena xifrada: " + paraula);
+        System.out.println(paraula);
         rotx.forcaBrutaRotX(paraula);
     }
 
     public String xifraRotX(String cadena, int des) {
-        StringBuilder resultat = new StringBuilder();
+        StringBuffer resultat = new StringBuffer();
         for (char i : cadena.toCharArray()) {
             if (Character.isLetter(i)) {
                 if (Character.isUpperCase(i)) {
                     for (int j = 0; j < abecedariMaj.length; j++) {
                         if (abecedariMaj[j] == i) {
-                            int pos = (j + des) % abecedariMaj.length;
+                            int pos = j + des;
+                            if (pos >= abecedariMaj.length) {
+                                pos -= abecedariMaj.length;
+                            }
                             resultat.append(abecedariMaj[pos]);
                             break;
                         }
@@ -31,7 +38,10 @@ public class RotX {
                 } else {
                     for (int j = 0; j < abecedari.length; j++) {
                         if (abecedari[j] == i) {
-                            int pos = (j + des) % abecedari.length;
+                            int pos = j + des;
+                            if (pos >= abecedari.length) {
+                                pos -= abecedari.length;
+                            }
                             resultat.append(abecedari[pos]);
                             break;
                         }
@@ -45,13 +55,16 @@ public class RotX {
     }
 
     public String desxifraRotX(String cadena, int des) {
-        StringBuilder resultat = new StringBuilder();
+        StringBuffer resultat = new StringBuffer();
         for (char i : cadena.toCharArray()) {
             if (Character.isLetter(i)) {
                 if (Character.isUpperCase(i)) {
                     for (int j = 0; j < abecedariMaj.length; j++) {
                         if (abecedariMaj[j] == i) {
-                            int pos = (j - des + abecedariMaj.length) % abecedariMaj.length;
+                            int pos = j - des;
+                            if (pos < 0) {
+                                pos += abecedariMaj.length;
+                            }
                             resultat.append(abecedariMaj[pos]);
                             break;
                         }
@@ -59,7 +72,10 @@ public class RotX {
                 } else {
                     for (int j = 0; j < abecedari.length; j++) {
                         if (abecedari[j] == i) {
-                            int pos = (j - des + abecedari.length) % abecedari.length;
+                            int pos = j - des;
+                            if (pos < 0) {
+                                pos += abecedariMaj.length;
+                            }
                             resultat.append(abecedari[pos]);
                             break;
                         }
@@ -78,3 +94,4 @@ public class RotX {
         }
     }
 }
+
