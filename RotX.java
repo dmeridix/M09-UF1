@@ -24,7 +24,10 @@ public class RotX {
                 if (Character.isUpperCase(i)) {
                     for (int j = 0; j < abecedariMaj.length; j++) {
                         if (abecedariMaj[j] == i) {
-                            int pos = (j + des) % abecedariMaj.length;
+                            int pos = j + des;
+                            if (pos >= abecedariMaj.length) {
+                                pos -= abecedariMaj.length;
+                            }
                             resultat.append(abecedariMaj[pos]);
                             break;
                         }
@@ -32,7 +35,10 @@ public class RotX {
                 } else {
                     for (int j = 0; j < abecedari.length; j++) {
                         if (abecedari[j] == i) {
-                            int pos = (j + des) % abecedari.length;
+                            int pos = j + des;
+                            if (pos >= abecedari.length) {
+                                pos -= abecedari.length;
+                            }
                             resultat.append(abecedari[pos]);
                             break;
                         }
