@@ -49,7 +49,11 @@ public class Rot13 {
             if (Character.isUpperCase(i) == true){
                 for (char e: abecedari){
                     if (e == i){
-                        pos =  13 - abecedari[e];
+                        pos = abecedariCOnt[e] + 13;
+                        if (pos >= abecedari.length){
+                            pos -= abecedari.length;
+                        }
+                        break;
                     }
                 }
                 resultat = resultat + abecedariCOnt[pos];
@@ -57,7 +61,10 @@ public class Rot13 {
             else {
                 for (char e: abecedariCOnt){
                     if (e == i){
-                        pos = 13 - abecedariCOnt[e];
+                        pos = abecedariCOnt[e] + 13;
+                        if (pos >= abecedari.length){
+                            pos -= abecedari.length;
+                        }
                         break;
                     }
                 }
