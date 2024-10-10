@@ -59,6 +59,7 @@ public class Polialfabetic {
     }
 
     public String xifraCadena(String cadena, boolean xifra) {
+        // Utilizem el StringBuilder en comptes del StringBuffer ja que és més ràpid 
         StringBuilder resultat = new StringBuilder();
         for (char i : cadena.toCharArray()) {
             // Permuta l'alfabet per cada lletra
