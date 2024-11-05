@@ -1,8 +1,34 @@
 package iticbcn.xifratge;
 
-public class XifradorRotX implements Xifrador{
+public class XifradorRotX implements Xifrador {
     public static final char[] abecedari = "aáàäbcçdeéèëfghiíìïjklmnñoóòöpqrstuúùüvwxyz".toCharArray();
     public static final char[] abecedariMaj = "AÁÀÄBCÇDEÉÈËFGHIÍÌÏJKLMNÑOÓÒÖPQRSTUÚÙÜVXYZ".toCharArray();
+
+    private int validarClau(String clau) throws ClauNoSuportada {
+        try {
+            int valor = Integer.parseInt(clau);
+            if (valor < 0 || valor > 40) {
+                throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+            }
+            return valor;
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+        }
+    }
+
+    // Implementación de xifra(String, String) según la interfaz Xifrador
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        int desplaçament = validarClau(clau);
+        return new TextXifrat(xifraRotX(msg, desplaçament).getBytes());
+    }
+
+    // Implementación de desxifra(TextXifrat, String) según la interfaz Xifrador
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        int desplaçament = validarClau(clau);
+        return desxifraRotX(new String(xifrat.getBytes()), desplaçament);
+    }
 
     public String xifraRotX(String cadena, int des) {
         StringBuilder resultat = new StringBuilder();

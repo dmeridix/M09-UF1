@@ -5,44 +5,47 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class XifradorPolialfabetic implements Xifrador{
+public class XifradorPolialfabetic implements Xifrador {
     public static final char[] abecedari = "aáàäbcçdeéèëfghiíìïjklmnñoóòöpqrstuúùüvwxyz".toCharArray();
-    public Random ran;
-    public char[] permutat;
+    private Random ran;
+    private char[] permutat;
 
-    // Inicialitza el random amb el valor que agafem com a parametre 
-    public void initRandom(int contrasenya) {
-        ran = new Random(contrasenya);
+    // Inicializa el generador de números aleatorios con la clave convertida a long
+    private void initRandom(String clau) throws ClauNoSuportada {
+        try {
+            long seed = Long.parseLong(clau);
+            ran = new Random(seed);
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("La clau per xifrat Polialfabètic ha de ser un String convertible a long");
+        }
     }
 
-    // Permuta l'alfabet utilitzant el random (ran)
+    // Permuta el alfabeto usando el generador de números aleatorios (ran)
     public void permutaAlfabet() {
-        List<Character> mezclar = new ArrayList<Character>();
+        List<Character> mezclar = new ArrayList<>();
         for (char i : abecedari) {
             mezclar.add(i);
         }
-        Collections.shuffle(mezclar, ran);  
+        Collections.shuffle(mezclar, ran);
         char[] llistaFinal = new char[mezclar.size()];
         for (int j = 0; j < mezclar.size(); j++) {
             llistaFinal[j] = mezclar.get(j);
         }
-        permutat = llistaFinal;  
+        permutat = llistaFinal;
     }
 
     public String xifraPoliAlfa(String msg) {
-        return xifraCadena(msg, true);  
+        return xifraCadena(msg, true);
     }
 
     public String desxifraPoliAlfa(String msgXifrat) {
-        return xifraCadena(msgXifrat, false);  
+        return xifraCadena(msgXifrat, false);
     }
 
     public String xifraCadena(String cadena, boolean xifra) {
-        // Utilizem el StringBuilder en comptes del StringBuffer ja que és més ràpid 
         StringBuilder resultat = new StringBuilder();
         for (char i : cadena.toCharArray()) {
-            // Permuta l'alfabet per cada lletra
-            permutaAlfabet();  
+            permutaAlfabet();
             char[] base = permutat;
             char[] desti = abecedari;
             if (!xifra) {
@@ -53,9 +56,8 @@ public class XifradorPolialfabetic implements Xifrador{
             boolean maj = false;
             if (Character.isLetter(i)) {
                 if (Character.isUpperCase(i)) {
-                    // Converteix a minúscula si és majúscula i posem com a valor true a la variable maj
                     maj = true;
-                    i = Character.toLowerCase(i);  
+                    i = Character.toLowerCase(i);
                 }
                 for (int j = 0; j < base.length; j++) {
                     if (base[j] == i) {
@@ -64,9 +66,8 @@ public class XifradorPolialfabetic implements Xifrador{
                     }
                 }
                 char caracterXifrat = desti[pos];
-                // Torna a convertir en majúscula si la variable maj es true
                 if (maj) {
-                    caracterXifrat = Character.toUpperCase(caracterXifrat);  
+                    caracterXifrat = Character.toUpperCase(caracterXifrat);
                 }
                 resultat.append(caracterXifrat);
             } else {
@@ -74,5 +75,19 @@ public class XifradorPolialfabetic implements Xifrador{
             }
         }
         return resultat.toString();
+    }
+
+    // Implementación de xifra(String, String) según la interfaz Xifrador
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        initRandom(clau); // Inicializa el random con la clave validada
+        return new TextXifrat(xifraPoliAlfa(msg).getBytes());
+    }
+
+    // Implementación de desxifra(TextXifrat, String) según la interfaz Xifrador
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        initRandom(clau); // Inicializa el random con la clave validada
+        return desxifraPoliAlfa(new String(xifrat.getBytes()));
     }
 }
